@@ -35,12 +35,12 @@ void i2c_send_byte(unsigned char byte)
 	while (!(TWCR & (1 << TWINT)));
 }
 
-void i2c_send_pocket(unsigned char value, unsigned char address)
+void i2c_send_packet(unsigned char value, unsigned char address)
 {
-	startCondition();
-	sendByte(address);
-	sendByte(value);
-	stopCondition();
+	i2c_start_condition();
+	i2c_send_byte(address);
+	i2c_send_byte(value);
+	i2c_stop_condition();
 }
 
 unsigned char i2c_recv_byte(void)
