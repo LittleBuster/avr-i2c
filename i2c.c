@@ -1,6 +1,6 @@
 /* I2C (TwoWire) AVR library
  *
- * Copyright (C) 2015 Sergey Denisov.
+ * Copyright (C) 2015-2017 Sergey Denisov.
  * Rewritten by Sergey Denisov aka LittleBuster (DenisovS21@gmail.com)
  *
  * This library is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@ void i2c_init(void)
 void i2c_start_condition(void)
 {
 	TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
-	while (!(TWCR & (1 << TWINT)));
+    while ((TWCR & (1 << TWINT)) == 0);
 }
 
 void i2c_stop_condition(void)
@@ -31,8 +31,8 @@ void i2c_stop_condition(void)
 void i2c_send_byte(unsigned char byte)
 {
 	TWDR = byte;
-	TWCR = (1 << TWINT)|(1 << TWEN);
-	while (!(TWCR & (1 << TWINT)));
+    TWCR = (1 << TWINT) | (1 << TWEN);
+    while ((TWCR & (1 << TWINT)) == 0);
 }
 
 void i2c_send_packet(unsigned char value, unsigned char address)
@@ -45,22 +45,14 @@ void i2c_send_packet(unsigned char value, unsigned char address)
 
 unsigned char i2c_recv_byte(void)
 {
-	unsigned char data;
-
-	TWCR |= (1 << TWINT) | (1 << TWEN) | (1 << TWEA);
-	while (!(TWCR & (1 << TWINT)));
-	data = TWDR;
-
-	return data;
+	TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWEA);
+    while ((TWCR & (1 << TWINT)) == 0);
+    return TWDR;
 }
 
 unsigned char i2c_recv_last_byte(void)
 {
-	unsigned char data;
-
-	TWCR |= (1 << TWINT) | (1 << TWEN) | (0 << TWEA);
-	while (!(TWCR & (1 << TWINT)));
-	data = TWDR;
-
-	return data;
+	TWCR = (1 << TWINT) | (1 << TWEN);
+    while ((TWCR & (1 << TWINT)) == 0);
+    return TWDR;
 }

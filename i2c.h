@@ -1,6 +1,6 @@
 /* I2C (TwoWire) AVR library
  *
- * Copyright (C) 2015 Sergey Denisov.
+ * Copyright (C) 2015-2017 Sergey Denisov.
  * Rewritten by Sergey Denisov aka LittleBuster (DenisovS21@gmail.com)
  *
  * This library is free software; you can redistribute it and/or
